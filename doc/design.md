@@ -2,15 +2,11 @@
 
 ## Micro-services:
 
-- **Deploy**: Responsible for launching the application.
-- **Core**: Contains the application logic
+- **Backend**: Expose endpoints for the frontend
 
 ## Diagrams
 
 ```mermaid
 graph TD
-    deploy[Deploy]
-    core[Core]
-
-    deploy --> |depend| core
+    backend[Deploy]
 ```

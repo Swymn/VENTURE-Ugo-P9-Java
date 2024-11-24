@@ -10,7 +10,6 @@
     <name>medilab</name>
 
     <modules>
-        <module>deploy</module>
-        <module>core</module>
+        <module>backend</module>
     </modules>
 </project>
