@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
 import fr.swynn.models.Patient;
 
@@ -21,16 +22,20 @@ public class FakePatientService implements PatientService {
      */
     @Override
     public Optional<Patient> updatePatientFirstName(final UUID patientIdentifier, final String newFirstName) {
-        Optional<Patient> optionalPatient = patients.stream()
+        return updatePatient(patientIdentifier, patient -> 
+            new Patient(patient.identifier(), newFirstName, patient.lastName(), patient.birthDate(), patient.gender(), patient.address(), patient.phoneNumber()));
+    }
+
+    @Override
+    public Optional<Patient> addPostalAddress(final UUID patientIdentifier, final String address) {
+        return updatePatient(patientIdentifier, patient -> 
+            new Patient(patient.identifier(), patient.firstName(), patient.lastName(), patient.birthDate(), patient.gender(), address, patient.phoneNumber()));
+    }
+
+    private Optional<Patient> updatePatient(UUID patientIdentifier, Function<Patient, Patient> updater) {
+        return patients.stream()
                 .filter(p -> p.identifier().equals(patientIdentifier))
-                .findFirst();
-        
-        if (optionalPatient.isEmpty()) {
-            return Optional.empty();
-        }
-        
-        var patient = optionalPatient.get();
-        var updatedPatient = new Patient(patient.identifier(), newFirstName, patient.lastName(), patient.birthDate(), patient.gender(), patient.address(), patient.phoneNumber());
-        return Optional.of(updatedPatient);
+                .findFirst()
+                .map(updater);
     }
 }

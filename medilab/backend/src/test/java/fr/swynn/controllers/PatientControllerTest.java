@@ -63,4 +63,51 @@ class PatientControllerTest {
         // THEN a not found error should be returned
         Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(404));
     }
+
+    @Test
+    void addPostalAddress_addPostalAddress_existingPatient() {
+        // GIVEN a patient controller with an existing patient
+        // AND a patient identifier
+        var patientIdentifier = "550e8400-e29b-41d4-a716-446655440000";
+        // AND a new postal address
+        var newPostalAddress = "1234 Main St, Springfield, IL 62701";
+
+        // WHEN adding a postal address to the patient
+        var response = patientController.addPostalAddress(patientIdentifier, newPostalAddress);
+
+        // THEN the postal address should be added to the patient
+        var updatedPatient = response.getBody();
+        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(200));
+        Assertions.assertEquals(newPostalAddress, updatedPatient.address());
+    }
+
+    @Test
+    void addPostalAddress_notFound_missingPatient() {
+        // GIVEN a patient controller with an existing patient
+        // AND a patient identifier
+        var patientIdentifier = "550e8400-e29b-41d4-a716-446655440001";
+        // AND a new postal address
+        var newPostalAddress = "1234 Main St, Springfield, IL 62701";
+
+        // WHEN adding a postal address to the patient
+        var response = patientController.addPostalAddress(patientIdentifier, newPostalAddress);
+
+        // THEN the controller should return a 404 error
+        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(404));
+    }
+
+    @Test
+    void addPostalAddress_internalError_wrongUuidFormat() {
+        // GIVEN a patient controller with an existing patient
+        // AND a patient identifier
+        var patientIdentifier = "invalid";
+        // AND a new postal address
+        var newPostalAddress = "1234 Main St, Springfield, IL 62701";
+
+        // WHEN adding a postal address to the patient
+        var response = patientController.addPostalAddress(patientIdentifier, newPostalAddress);
+
+        // THEN the controller should return a 404 error
+        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(500));
+    }
 }

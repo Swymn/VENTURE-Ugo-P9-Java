@@ -15,4 +15,13 @@ public interface PatientService {
      * @return the updated patient
      */
     Optional<Patient> updatePatientFirstName(UUID patientIdentifier, String newFirstName);
+
+    /**
+     * Add a postal address to a patient
+     * 
+     * @param patientIdentifier the identifier of the patient
+     * @param address the postal address
+     * @return the updated patient
+     */
+    Optional<Patient> addPostalAddress(UUID patientIdentifier, String address);
 }
