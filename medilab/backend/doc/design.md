@@ -3,30 +3,26 @@
 ```mermaid
 classDiagram
     class PatientController {
-        + updateFirstName(patientIdentifier: UUID, newFirstName: String)
+        + updatePatient(patientIdentifier: UUID, patient: Patient)
     }
 
     class PatientService {
-        + updatePatientFirstName(patientIdentifier: UUID, newFirstName: String);
+        + updatePatient(patientIdentifier: UUID, patient: Patient)
     }
-
-    class PatientRepository 
 
     class Patient {
         - UUID identifier
         - String firstName
         - String lastName
-        - Date dateOfBirth
+        - Date birthDate
         - String gender
-        - String address
-        - String phoneNumber
+        - Optional<\String> address
+        - Optional<\String> phoneNumber
     }
 
     PatientController --> PatientService
-    PatientService --> PatientRepository
 
     PatientController ..> Patient
     PatientService ..> Patient
-    PatientRepository ..> Patient
 
 ```

@@ -1,113 +1,90 @@
 package fr.swynn.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
 
+import fr.swynn.models.Patient;
 import fr.swynn.services.FakePatientService;
 
 class PatientControllerTest {
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final String DEFAULT_FIRST_NAME = "John";
+    private static final String DEFAULT_LAST_NAME = "Doe";
+    private static final String DEFAULT_GENDER = "Male";
+    private static final String DEFAULT_DATE = "2023-10-01T00:00:00Z";
+    
     private PatientController patientController;
 
-    @BeforeEach()
+    @BeforeEach
     void setUp() {
-        var FakePatientService = new FakePatientService();
-        patientController = new PatientController(FakePatientService);
+        var fakePatientService = new FakePatientService();
+        patientController = new PatientController(fakePatientService);
+    }
+
+    private Patient createFakePatient(UUID identifier, String firstName, String lastName) throws ParseException {
+        var date = new SimpleDateFormat(DATE_FORMAT).parse(DEFAULT_DATE);
+        return new Patient(identifier, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
+    }
+
+    private Patient createFakePatient(UUID identifier, String phoneNumber) throws ParseException {
+        var date = new SimpleDateFormat(DATE_FORMAT).parse(DEFAULT_DATE);
+        return new Patient(identifier, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
     }
 
     @Test
-    void updatePatientFirstName_updatePatientName_existingPatient() {
+    void updatePatient_updatePatientFirstName_existingPatient() throws ParseException {
         // GIVEN a patient controller with an existing patient
-        // AND a patient identifier
-        var patientIdentifier = "550e8400-e29b-41d4-a716-446655440000";
-        // AND a new first name
-        var newFirstName = "Edgar";
+        var patientIdentifier = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        var newFirstName = "Roger";
+        var newLastName = "Oxendale";
+        var patient = createFakePatient(patientIdentifier, newFirstName, newLastName);
 
         // WHEN updating the patient first name
-        var response = patientController.updatePatientFirstName(patientIdentifier, newFirstName);
+        var response = patientController.updatePatientFirstName(patientIdentifier, patient);
 
         // THEN the patient first name should be updated
         var updatedPatient = response.getBody();
-        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(200));
+        Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         Assertions.assertEquals(newFirstName, updatedPatient.firstName());
+        Assertions.assertEquals(newLastName, updatedPatient.lastName());
     }
 
     @Test
-    void updatePatientFirstName_internalError_invalidPatientIdentifier() {
+    void updatePatient_notFound_missingPatient() throws ParseException {
         // GIVEN a patient controller with an existing patient
-        // AND an invalid patient identifier
-        var patientIdentifier = "invalid";
-        // AND a new first name
-        var newFirstName = "Edgar";
+        var patientIdentifier = UUID.fromString("550e8400-e29b-41d4-a716-446655440001");
+        var newFirstName = "Roger";
+        var newLastName = "Oxendale";
+        var patient = createFakePatient(patientIdentifier, newFirstName, newLastName);
 
         // WHEN updating the patient first name
-        var response = patientController.updatePatientFirstName(patientIdentifier, newFirstName);
+        var response = patientController.updatePatientFirstName(patientIdentifier, patient);
 
-        // THEN an internal error should be returned
-        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(500));
+        // THEN the patient should not be found
+        Assertions.assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
     }
 
     @Test
-    void updatePatientFirstName_notFound_nonExistingPatient() {
+    void updatePatient_addNewField_existingPatient() throws ParseException {
         // GIVEN a patient controller with an existing patient
-        // AND a non-existing patient identifier
-        var patientIdentifier = "550e8400-e29b-41d4-a716-446655440001";
-        // AND a new first name
-        var newFirstName = "Edgar";
+        var patientIdentifier = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        var newPhoneNumber = "+1-555-123-4567";
+        var patient = createFakePatient(patientIdentifier, newPhoneNumber);
 
         // WHEN updating the patient first name
-        var response = patientController.updatePatientFirstName(patientIdentifier, newFirstName);
+        var response = patientController.updatePatientFirstName(patientIdentifier, patient);
 
-        // THEN a not found error should be returned
-        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(404));
-    }
-
-    @Test
-    void addPostalAddress_addPostalAddress_existingPatient() {
-        // GIVEN a patient controller with an existing patient
-        // AND a patient identifier
-        var patientIdentifier = "550e8400-e29b-41d4-a716-446655440000";
-        // AND a new postal address
-        var newPostalAddress = "1234 Main St, Springfield, IL 62701";
-
-        // WHEN adding a postal address to the patient
-        var response = patientController.addPostalAddress(patientIdentifier, newPostalAddress);
-
-        // THEN the postal address should be added to the patient
+        // THEN the patient first name should be updated
         var updatedPatient = response.getBody();
-        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(200));
-        Assertions.assertEquals(newPostalAddress, updatedPatient.address());
-    }
-
-    @Test
-    void addPostalAddress_notFound_missingPatient() {
-        // GIVEN a patient controller with an existing patient
-        // AND a patient identifier
-        var patientIdentifier = "550e8400-e29b-41d4-a716-446655440001";
-        // AND a new postal address
-        var newPostalAddress = "1234 Main St, Springfield, IL 62701";
-
-        // WHEN adding a postal address to the patient
-        var response = patientController.addPostalAddress(patientIdentifier, newPostalAddress);
-
-        // THEN the controller should return a 404 error
-        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(404));
-    }
-
-    @Test
-    void addPostalAddress_internalError_wrongUuidFormat() {
-        // GIVEN a patient controller with an existing patient
-        // AND a patient identifier
-        var patientIdentifier = "invalid";
-        // AND a new postal address
-        var newPostalAddress = "1234 Main St, Springfield, IL 62701";
-
-        // WHEN adding a postal address to the patient
-        var response = patientController.addPostalAddress(patientIdentifier, newPostalAddress);
-
-        // THEN the controller should return a 404 error
-        Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(500));
+        Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+        Assertions.assertEquals(newPhoneNumber, updatedPatient.phoneNumber().get());
     }
 }
