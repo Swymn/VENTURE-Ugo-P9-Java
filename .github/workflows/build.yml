@@ -27,6 +27,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Compile and Test with Maven
+      - name: Run tests with Maven
         run: mvn clean test
+        working-directory: ./medilab
+
+      - name: Run integration tests with Maven
+        run: mvn clean integration-test
         working-directory: ./medilab
