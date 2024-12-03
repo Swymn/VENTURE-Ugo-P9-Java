@@ -17,6 +17,7 @@
         <spring.boot.version>3.4.0</spring.boot.version>
         <junit.version>5.8.1</junit.version>
         <maven.surefire.version>3.5.2</maven.surefire.version>
+        <maven.compiler.version>3.13.0</maven.compiler.version>
     </properties>
 
     <modules>
