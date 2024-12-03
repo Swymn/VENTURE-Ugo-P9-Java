@@ -1,12 +1,12 @@
-package fr.swynn.services;
+package fr.swynn.repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import fr.swynn.models.Patient;
 
-public interface PatientService {
-
+public interface PatientRepository {
+    
     /**
      * Update a patient
      * @param patientIdentifier the identifier of the patient

@@ -1,5 +1,6 @@
 package fr.swynn.controllers;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import fr.swynn.services.FakePatientService;
 
 class PatientControllerTest {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private static final String DEFAULT_FIRST_NAME = "John";
     private static final String DEFAULT_LAST_NAME = "Doe";
     private static final String DEFAULT_GENDER = "Male";
@@ -30,12 +31,12 @@ class PatientControllerTest {
     }
 
     private Patient createFakePatient(UUID identifier, String firstName, String lastName) throws ParseException {
-        var date = new SimpleDateFormat(DATE_FORMAT).parse(DEFAULT_DATE);
+        var date = DATE_FORMAT.parse(DEFAULT_DATE);
         return new Patient(identifier, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
     }
 
     private Patient createFakePatient(UUID identifier, String phoneNumber) throws ParseException {
-        var date = new SimpleDateFormat(DATE_FORMAT).parse(DEFAULT_DATE);
+        var date = DATE_FORMAT.parse(DEFAULT_DATE);
         return new Patient(identifier, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
     }
 
