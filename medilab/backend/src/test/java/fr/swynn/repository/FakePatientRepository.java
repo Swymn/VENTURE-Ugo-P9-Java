@@ -32,11 +32,20 @@ public class FakePatientRepository implements PatientRepository {
         return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
 
+    @Override
+    public Optional<Patient> createPatient(final Patient patient) {
+        if (patients.contains(patient)) {
+            return Optional.empty();
+        }
+        patients.add(patient);
+        return Optional.of(patient);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<Patient> updatePatient(UUID patientIdentifier, Patient patient) {
+    public Optional<Patient> updatePatient(final UUID patientIdentifier, final Patient patient) {
         var patientIndex = patients.indexOf(patient);
         if (patientIndex == -1) {
             return Optional.empty();

@@ -30,12 +30,12 @@ class PatientControllerTest {
         patientController = new PatientController(fakePatientService);
     }
 
-    private Patient createFakePatient(UUID identifier, String firstName, String lastName) throws ParseException {
+    private Patient createFakePatient(final UUID identifier, final String firstName, final String lastName) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
         return new Patient(identifier, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
     }
 
-    private Patient createFakePatient(UUID identifier, String phoneNumber) throws ParseException {
+    private Patient createFakePatient(final UUID identifier, final String phoneNumber) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
         return new Patient(identifier, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
     }

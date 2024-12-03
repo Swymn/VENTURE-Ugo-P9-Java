@@ -1,5 +1,8 @@
 package fr.swynn.services;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,11 +13,23 @@ import fr.swynn.models.Patient;
 
 public class FakePatientService implements PatientService {
 
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
     private final List<Patient> patients;
 
     public FakePatientService() {
-        var patient1 = new Patient(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "John", "Doe", new Date(), "Male", Optional.of("123 Main Street, Springfield, IL 62701, USA"), Optional.of("+1-555-123-4567"));
-        patients = new ArrayList<>(List.of(patient1));
+        patients = new ArrayList<>(List.of(createFakePatient()));
+    }
+
+    private Patient createFakePatient() {
+        var uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        Date date;
+        try {
+            date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
+        } catch (ParseException e) {
+            date = new Date();
+        }
+        return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
     
     /**

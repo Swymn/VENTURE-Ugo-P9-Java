@@ -25,7 +25,7 @@ class PatientServiceTest {
         patientService = new DefaultPatientService(repository);
     }
 
-    private Patient createFakePatient(UUID uuid) throws ParseException {
+    private Patient createFakePatient(final UUID uuid) throws ParseException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
         return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }

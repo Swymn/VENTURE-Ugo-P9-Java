@@ -6,6 +6,13 @@ import java.util.UUID;
 import fr.swynn.models.Patient;
 
 public interface PatientRepository {
+
+    /**
+     * Create a patient
+     * @param patient the patient to create
+     * @return the created patient
+     */
+    Optional<Patient> createPatient(Patient patient);
     
     /**
      * Update a patient

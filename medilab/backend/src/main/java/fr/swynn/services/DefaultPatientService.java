@@ -15,7 +15,7 @@ public class DefaultPatientService implements PatientService {
     private final PatientRepository patientRepository;
 
     @Autowired
-    public DefaultPatientService(PatientRepository patientRepository) {
+    public DefaultPatientService(final PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
      
@@ -23,7 +23,7 @@ public class DefaultPatientService implements PatientService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Patient> updatePatient(UUID patientIdentifier, Patient patient) {
+    public Optional<Patient> updatePatient(final UUID patientIdentifier, final Patient patient) {
         return patientRepository.updatePatient(patientIdentifier, patient);
     } 
 }

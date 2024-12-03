@@ -10,6 +10,11 @@ classDiagram
         + updatePatient(patientIdentifier: UUID, patient: Patient)
     }
 
+    class PatientRepository {
+        + createPatient(patient: Patient)
+        + updatePatient(identifier: UUID, patient: Patient)
+    }
+
     class Patient {
         - UUID identifier
         - String firstName
@@ -21,8 +26,10 @@ classDiagram
     }
 
     PatientController --> PatientService
+    PatientService --> PatientRepository
 
     PatientController ..> Patient
     PatientService ..> Patient
+    PatientRepository ..> Patient
 
 ```
