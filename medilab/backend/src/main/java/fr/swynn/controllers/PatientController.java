@@ -21,12 +21,7 @@ public class PatientController {
     public PatientController(final PatientService patientService) {
         this.patientService = patientService;
     }
-    
-    /**
-     * FIXME: This method need to go through handle optional parameter with Optional class
-     * Today it put a null value into the codebase and it's not a good practice
-     * Need to have an object mapper to map the request body to the object
-     */
+
     @PatchMapping("/patients/{identifier}")
     public ResponseEntity<Patient> updatePatientFirstName(final @PathVariable UUID identifier, final @RequestBody Patient patient) {
         var updatedPatient = patientService.updatePatient(identifier, patient);

@@ -9,15 +9,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.swynn.models.Patient;
 
 public class FakePatientRepository implements PatientRepository {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FakePatientRepository.class);
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     private List<Patient> patients;
 
     public FakePatientRepository() {
+        LOGGER.debug("Creating fake patient repository");
         this.patients = new ArrayList<>(List.of(createFakePatient()));
     }
 
@@ -46,7 +51,7 @@ public class FakePatientRepository implements PatientRepository {
      */
     @Override
     public Optional<Patient> updatePatient(final UUID patientIdentifier, final Patient patient) {
-        var patientIndex = patients.indexOf(patient);
+        var patientIndex = patients.stream().map(Patient::identifier).toList().indexOf(patientIdentifier);
         if (patientIndex == -1) {
             return Optional.empty();
         }
