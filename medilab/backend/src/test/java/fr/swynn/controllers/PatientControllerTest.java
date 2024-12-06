@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
 
-import fr.swynn.models.Patient;
+import fr.swynn.dto.PatientDto;
 import fr.swynn.services.FakePatientService;
 
 class PatientControllerTest {
@@ -30,14 +30,14 @@ class PatientControllerTest {
         patientController = new PatientController(fakePatientService);
     }
 
-    private Patient createFakePatient(final UUID identifier, final String firstName, final String lastName) throws ParseException {
+    private PatientDto createFakePatient(final UUID identifier, final String firstName, final String lastName) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
-        return new Patient(identifier, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
+        return new PatientDto(identifier, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
     }
 
-    private Patient createFakePatient(final UUID identifier, final String phoneNumber) throws ParseException {
+    private PatientDto createFakePatient(final UUID identifier, final String phoneNumber) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
-        return new Patient(identifier, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
+        return new PatientDto(identifier, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
     }
 
     @Test

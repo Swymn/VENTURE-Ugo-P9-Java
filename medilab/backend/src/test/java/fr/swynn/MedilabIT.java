@@ -144,4 +144,19 @@ class MedilabIT {
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Assertions.assertEquals(404, response.statusCode());
     }
+
+    @Test
+    void patchPatient_badRequestError_emptyPayload() throws IOException , InterruptedException {
+        // GIVEN an http client
+        // AND an empty payload
+        var uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        var emptyPatientPayload = "{}";
+
+        // WHEN we send a PATCH request to /patients/id
+        var request = buildRequest(uuid, emptyPatientPayload);
+
+        // THEN the response should be 400
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Assertions.assertEquals(400, response.statusCode());
+    }
 }
