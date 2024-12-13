@@ -34,7 +34,8 @@ public class FakePatientRepository implements PatientRepository {
         } catch (ParseException e) {
             date = new Date();
         }
-        return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        return new Patient(uuid, creationDate, creationDate, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
 
     @Override
@@ -51,7 +52,7 @@ public class FakePatientRepository implements PatientRepository {
      */
     @Override
     public Optional<Patient> updatePatient(final UUID patientIdentifier, final Patient patient) {
-        var patientIndex = patients.stream().map(Patient::identifier).toList().indexOf(patientIdentifier);
+        var patientIndex = patients.stream().map(Patient::getIdentifier).toList().indexOf(patientIdentifier);
         if (patientIndex == -1) {
             return Optional.empty();
         }

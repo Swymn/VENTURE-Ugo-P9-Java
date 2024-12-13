@@ -29,7 +29,8 @@ public class FakePatientService implements PatientService {
         } catch (ParseException e) {
             date = new Date();
         }
-        return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        return new Patient(uuid, creationDate, creationDate, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
     
     /**
@@ -39,7 +40,7 @@ public class FakePatientService implements PatientService {
     public Optional<Patient> updatePatient(final UUID patientIdentifier, final Patient patient) {
         for (var i = 0; i < patients.size(); i++) {
             var currentPatient = patients.get(i);
-            if (currentPatient.identifier().equals(patientIdentifier)) {
+            if (currentPatient.getIdentifier().equals(patientIdentifier)) {
                 patients.set(i, patient);
                 return Optional.of(patient);
             }

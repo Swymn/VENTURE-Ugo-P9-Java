@@ -3,6 +3,7 @@ package fr.swynn.repository;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,12 +26,14 @@ class PatientRepositoryTest {
 
     private Patient createFakePatient(final UUID uuid) throws ParseException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
-        return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        return new Patient(uuid, creationDate, creationDate, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
 
     private Patient createFakePatient(final UUID uuid, final String firstName) throws ParseException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
-        return new Patient(uuid, firstName, "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        return new Patient(uuid, creationDate, creationDate, firstName, "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
 
     private void populateRepository() throws ParseException {
@@ -83,6 +86,6 @@ class PatientRepositoryTest {
         // THEN the patient should be updated
         Assertions.assertTrue(updatedPatient.isPresent());
         Assertions.assertEquals(patient, updatedPatient.get());
-        Assertions.assertEquals("Jane", updatedPatient.get().firstName());
+        Assertions.assertEquals("Jane", updatedPatient.get().getFirstName());
     }
 }

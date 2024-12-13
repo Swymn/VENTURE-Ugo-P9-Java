@@ -3,6 +3,7 @@ package fr.swynn.controllers;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
 
-import fr.swynn.dto.PatientDto;
+import fr.swynn.models.Patient;
 import fr.swynn.services.FakePatientService;
 
 class PatientControllerTest {
@@ -30,14 +31,16 @@ class PatientControllerTest {
         patientController = new PatientController(fakePatientService);
     }
 
-    private PatientDto createFakePatient(final UUID identifier, final String firstName, final String lastName) throws ParseException {
+    private Patient createFakePatient(final UUID identifier, final String firstName, final String lastName) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
-        return new PatientDto(identifier, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        return new Patient(identifier, creationDate, creationDate, firstName, lastName, date, DEFAULT_GENDER, Optional.empty(), Optional.empty());
     }
 
-    private PatientDto createFakePatient(final UUID identifier, final String phoneNumber) throws ParseException {
+    private Patient createFakePatient(final UUID identifier, final String phoneNumber) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
-        return new PatientDto(identifier, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
+        var creationDate = new Date();
+        return new Patient(identifier, creationDate, creationDate, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, Optional.empty(), Optional.of(phoneNumber));
     }
 
     @Test
@@ -49,13 +52,13 @@ class PatientControllerTest {
         var patient = createFakePatient(patientIdentifier, newFirstName, newLastName);
 
         // WHEN updating the patient first name
-        var response = patientController.updatePatientFirstName(patientIdentifier, patient);
+        var response = patientController.updatePatient(patientIdentifier, patient);
 
         // THEN the patient first name should be updated
         var updatedPatient = response.getBody();
         Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
-        Assertions.assertEquals(newFirstName, updatedPatient.firstName());
-        Assertions.assertEquals(newLastName, updatedPatient.lastName());
+        Assertions.assertEquals(newFirstName, updatedPatient.getFirstName());
+        Assertions.assertEquals(newLastName, updatedPatient.getLastName());
     }
 
     @Test
@@ -67,7 +70,7 @@ class PatientControllerTest {
         var patient = createFakePatient(patientIdentifier, newFirstName, newLastName);
 
         // WHEN updating the patient first name
-        var response = patientController.updatePatientFirstName(patientIdentifier, patient);
+        var response = patientController.updatePatient(patientIdentifier, patient);
 
         // THEN the patient should not be found
         Assertions.assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
@@ -81,11 +84,11 @@ class PatientControllerTest {
         var patient = createFakePatient(patientIdentifier, newPhoneNumber);
 
         // WHEN updating the patient first name
-        var response = patientController.updatePatientFirstName(patientIdentifier, patient);
+        var response = patientController.updatePatient(patientIdentifier, patient);
 
         // THEN the patient first name should be updated
         var updatedPatient = response.getBody();
         Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
-        Assertions.assertEquals(newPhoneNumber, updatedPatient.phoneNumber().get());
+        Assertions.assertEquals(newPhoneNumber, updatedPatient.getPhoneNumber().get());
     }
 }

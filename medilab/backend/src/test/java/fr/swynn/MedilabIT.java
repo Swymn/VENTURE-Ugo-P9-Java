@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,7 +53,8 @@ class MedilabIT {
 
     private String createFakeParsedPatient(final UUID uuid, final String firstName) throws ParseException, IOException, InterruptedException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
-        var patient = new Patient(uuid, firstName, "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        var patient = new Patient(uuid, creationDate, creationDate, firstName, "Doe", date, "Male", Optional.empty(), Optional.empty());
         return MAPPER.writeValueAsString(patient);
     }
 
@@ -62,7 +64,7 @@ class MedilabIT {
         return HttpRequest.newBuilder()
             .uri(URI.create(baseUrl))
             .header("Content-Type", "application/json")
-            .method("PATCH", HttpRequest.BodyPublishers.ofString(parsedPatient))
+            .method("PUT", HttpRequest.BodyPublishers.ofString(parsedPatient))
             .build();
     }
 
@@ -96,7 +98,7 @@ class MedilabIT {
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
         var updatedPatient = MAPPER.readValue(response.body(), Patient.class);
 
-        Assertions.assertEquals(newPatientFirstName, updatedPatient.firstName());
+        Assertions.assertEquals(newPatientFirstName, updatedPatient.getFirstName());
     }
 
     @Test
@@ -104,7 +106,7 @@ class MedilabIT {
         // GIVEN an http client
         // AND a patient with a known UUID
         var uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-        var patient = "{\"identifier\":\"550e8400-e29b-41d4-a716-446655440000\",\"firstName\":\"John\",\"lastName\":\"Doe\",\"birthDate\":\"2023-10-01T00:00:00Z\",\"gender\":\"Male\"}";
+        var patient = "{\"identifier\":\"550e8400-e29b-41d4-a716-446655440000\",\"createdAt\":\"2023-10-01T00:00:00Z\",\"updatedAt\":\"2023-10-01T00:00:00Z\",\"firstName\":\"John\",\"lastName\":\"Doe\",\"birthDate\":\"2023-10-01T00:00:00Z\",\"gender\":\"Male\"}";
 
         // WHEN we send a PATCH request to /patients/id
         var request = buildRequest(uuid, patient);
@@ -119,7 +121,7 @@ class MedilabIT {
         // GIVEN an http client
         // AND a patient with a known UUID
         var uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-        var patient = "{\"identifier\":\"550e8400-e29b-41d4-a716-446655440000\",\"firstName\":\"John\",\"lastName\":\"Dane\",\"birthDate\":\"2023-10-01T00:00:00Z\",\"gender\":\"Male\"}";
+        var patient = "{\"identifier\":\"550e8400-e29b-41d4-a716-446655440000\",\"createdAt\":\"2023-10-01T00:00:00Z\",\"updatedAt\":\"2023-10-01T00:00:00Z\",\"firstName\":\"John\",\"lastName\":\"Dane\",\"birthDate\":\"2023-10-01T00:00:00Z\",\"gender\":\"Male\"}";
 
         // WHEN we send a PATCH request to /patients/id
         var request = buildRequest(uuid, patient);
@@ -127,7 +129,7 @@ class MedilabIT {
         // THEN the response should be 200
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
         var updatedPatient = MAPPER.readValue(response.body(), Patient.class);
-        Assertions.assertEquals("Dane", updatedPatient.lastName());
+        Assertions.assertEquals("Dane", updatedPatient.getLastName());
     }
 
     @Test

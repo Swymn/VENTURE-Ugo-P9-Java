@@ -3,6 +3,7 @@ package fr.swynn.services;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,7 +28,8 @@ class PatientServiceTest {
 
     private Patient createFakePatient(final UUID uuid) throws ParseException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
-        return new Patient(uuid, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var creationDate = new Date();
+        return new Patient(uuid, creationDate, creationDate, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
     }
 
     @Test

@@ -26,12 +26,12 @@ public class InMemoryPatientRepository implements PatientRepository {
      */
     @Override
     public Optional<Patient> createPatient(final Patient patient) {
-        if (patients.containsKey(patient.identifier())) {
-            LOGGER.debug("Patient with identifier {} already exists", patient.identifier());
+        if (patients.containsKey(patient.getIdentifier())) {
+            LOGGER.debug("Patient with identifier {} already exists", patient.getIdentifier());
             return Optional.empty();
         }
-        patients.put(patient.identifier(), patient);
-        LOGGER.debug("Patient with identifier {} created", patient.identifier());
+        patients.put(patient.getIdentifier(), patient);
+        LOGGER.debug("Patient with identifier {} created", patient.getIdentifier());
         return Optional.of(patient);
     }
 
