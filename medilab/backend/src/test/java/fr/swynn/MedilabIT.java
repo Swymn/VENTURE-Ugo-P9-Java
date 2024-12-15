@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
@@ -54,7 +53,7 @@ class MedilabIT {
     private String createFakeParsedPatient(final UUID uuid, final String firstName) throws ParseException, IOException, InterruptedException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
         var creationDate = new Date();
-        var patient = new Patient(uuid, creationDate, creationDate, firstName, "Doe", date, "Male", Optional.empty(), Optional.empty());
+        var patient = new Patient(uuid, creationDate, creationDate, firstName, "Doe", date, "Male", null, null);
         return MAPPER.writeValueAsString(patient);
     }
 

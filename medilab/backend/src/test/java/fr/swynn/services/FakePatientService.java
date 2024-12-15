@@ -30,7 +30,7 @@ public class FakePatientService implements PatientService {
             date = new Date();
         }
         var creationDate = new Date();
-        return new Patient(uuid, creationDate, creationDate, "John", "Doe", date, "Male", Optional.empty(), Optional.empty());
+        return new Patient(uuid, creationDate, creationDate, "John", "Doe", date, "Male", null, null);
     }
     
     /**
