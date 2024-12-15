@@ -4,22 +4,30 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import fr.swynn.models.Patient;
+import fr.swynn.repository.PatientRepository;
 
-@SpringBootTest()
 class PatientServiceTest {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-    @Autowired
     private PatientService patientService;
+    private PatientRepository patientRepository;
+
+    @BeforeEach
+    void setUp() {
+        patientRepository = Mockito.mock(PatientRepository.class);
+        patientService = new DefaultPatientService(patientRepository);
+    }
 
     private Patient createFakePatient(final UUID uuid) throws ParseException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
@@ -35,6 +43,8 @@ class PatientServiceTest {
         var patient = createFakePatient(uuid);
 
         // WHEN updating the patient
+        Mockito.when(patientRepository.existsById(uuid)).thenReturn(true);
+        Mockito.when(patientRepository.save(patient)).thenReturn(patient);
         var updatedPatient = patientService.updatePatient(uuid, patient);
 
         // THEN the patient should be updated
@@ -50,6 +60,7 @@ class PatientServiceTest {
         var nonExistingPatient = createFakePatient(uuid);
 
         // WHEN updating the patient
+        Mockito.when(patientRepository.existsById(uuid)).thenReturn(false);
         var updatedPatient = patientService.updatePatient(uuid, nonExistingPatient);
 
         // THEN the patient should not be updated

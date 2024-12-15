@@ -39,7 +39,7 @@ class PatientControllerTest {
     private Patient createFakePatient(final UUID identifier, final String phoneNumber) throws ParseException {
         var date = DATE_FORMAT.parse(DEFAULT_DATE);
         var creationDate = new Date();
-        return new Patient(identifier, creationDate, creationDate, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, null, "phoneNumber");
+        return new Patient(identifier, creationDate, creationDate, DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, date, DEFAULT_GENDER, null, phoneNumber);
     }
 
     @Test
