@@ -21,6 +21,8 @@
         <jackson.version>2.18.2</jackson.version>
         <lombok.version>1.18.36</lombok.version>
         <jakarta.version>3.2.0</jakarta.version>
+        <postgresql.version>42.7.4</postgresql.version>
+        <h2.version>2.3.232</h2.version>
     </properties>
 
     <modules>

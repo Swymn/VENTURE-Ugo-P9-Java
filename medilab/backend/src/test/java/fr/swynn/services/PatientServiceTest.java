@@ -8,23 +8,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import fr.swynn.models.Patient;
-import fr.swynn.repository.FakePatientRepository;
 
+@SpringBootTest()
 class PatientServiceTest {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
+    @Autowired
     private PatientService patientService;
-
-    @BeforeEach
-    void setUp() {
-        var repository = new FakePatientRepository();
-        patientService = new DefaultPatientService(repository);
-    }
 
     private Patient createFakePatient(final UUID uuid) throws ParseException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");

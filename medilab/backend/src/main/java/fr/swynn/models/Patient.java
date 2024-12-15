@@ -1,7 +1,6 @@
 package fr.swynn.models;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -51,6 +50,6 @@ public class Patient {
     @NotNull(message = "Gender is required (Male/Female)")
     private String gender;
 
-    private Optional<String> address;
-    private Optional<String> phoneNumber;
+    private String address;
+    private String phoneNumber;
 }

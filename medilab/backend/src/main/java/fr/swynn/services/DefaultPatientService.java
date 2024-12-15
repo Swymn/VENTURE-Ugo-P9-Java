@@ -24,6 +24,9 @@ public class DefaultPatientService implements PatientService {
      */
     @Override
     public Optional<Patient> updatePatient(final UUID patientIdentifier, final Patient patient) {
-        return patientRepository.updatePatient(patientIdentifier, patient);
+        if (!patientRepository.existsById(patientIdentifier)) {
+            return Optional.empty();
+        }
+        return Optional.of(patientRepository.save(patient));
     } 
 }
