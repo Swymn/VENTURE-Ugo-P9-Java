@@ -1,27 +1,24 @@
-# Stage 1: Build the application
+## Stage 1
 FROM maven:3.9 AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the whole project to the container
 COPY . .
 
-# Build only the backend module
 WORKDIR /app/medilab
 RUN mvn -pl backend -am clean package -DskipTests
 
-# Stage 2: Run the application
+## Stage 2
 FROM openjdk:21-jdk
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the JAR file for the backend module from the builder stage
 COPY --from=builder /app/medilab/backend/target/*.jar app.jar
 
-# Expose the port your Spring Boot application runs on
 EXPOSE 8080
 
-# Command to run the Spring Boot application
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/medilab
+ENV SPRING_DATASOURCE_USERNAME=postgres
+ENV SPRING_DATASOURCE_PASSWORD=rootroot
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -2,16 +2,16 @@ version: '3.9'
 
 services:
   database:
-    image: postgres:17
+    image: oc-9-database:latest
     container_name: database
     restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - medilab-network
     environment:
       - POSTGRES_PASSWORD=rootroot
       - POSTGRES_USER=postgres
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
 
   backend:
     image: oc-9-backend:latest
@@ -19,3 +19,13 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    networks:
+      - medilab-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/medilab
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=rootroot
+
+networks:
+  medilab-network:
+    driver: bridge
