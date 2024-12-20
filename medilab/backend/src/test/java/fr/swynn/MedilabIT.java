@@ -15,21 +15,23 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import fr.swynn.models.Patient;
+import fr.swynn.repository.PatientRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("testing")
 class MedilabIT {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static PatientRepository patientRepository;
 
     @LocalServerPort
     private int port;
@@ -39,6 +41,8 @@ class MedilabIT {
     @BeforeAll
     static void setUpAll() {
         MAPPER.registerModule(new Jdk8Module());
+        patientRepository = Mockito.mock(PatientRepository.class);
+        Mockito.when(patientRepository.existsById(Mockito.any(UUID.class))).thenReturn(true);
     }
 
     @BeforeEach
@@ -46,11 +50,11 @@ class MedilabIT {
         client = HttpClient.newHttpClient();
     }
 
-    private String createFakeParsedPatient(final UUID uuid) throws ParseException, IOException, InterruptedException {
+    private static String createFakeParsedPatient(final UUID uuid) throws ParseException, IOException {
         return createFakeParsedPatient(uuid, "John");
     }
 
-    private String createFakeParsedPatient(final UUID uuid, final String firstName) throws ParseException, IOException, InterruptedException {
+    private static String createFakeParsedPatient(final UUID uuid, final String firstName) throws ParseException, IOException {
         var date = DATE_FORMAT.parse("2023-10-01T00:00:00Z");
         var creationDate = new Date();
         var patient = new Patient(uuid, creationDate, creationDate, firstName, "Doe", date, "Male", null, null);

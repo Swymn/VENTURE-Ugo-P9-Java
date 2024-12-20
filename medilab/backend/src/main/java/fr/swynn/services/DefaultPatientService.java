@@ -3,7 +3,6 @@ package fr.swynn.services;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.swynn.models.Patient;
@@ -14,7 +13,6 @@ public class DefaultPatientService implements PatientService {
 
     private final PatientRepository patientRepository;
 
-    @Autowired
     public DefaultPatientService(final PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }

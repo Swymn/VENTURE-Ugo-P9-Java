@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  database:
+    image: postgres:17
+    container_name: database
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=rootroot
+      - POSTGRES_USER=postgres
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+  backend:
+    image: oc-9-backend:latest
+    container_name: backend
+    restart: always
+    ports:
+      - "8080:8080"
