@@ -25,6 +25,8 @@
         <maven.compiler.version>3.13.0</maven.compiler.version>
 
         <spring.boot.version>3.4.1</spring.boot.version>
+        <spring.cloud.gateway.version>4.2.0</spring.cloud.gateway.version>
+        <spring.cloud.version>2024.0.0</spring.cloud.version>
         <junit.version>5.8.1</junit.version>
         <jackson.version>2.18.2</jackson.version>
         <lombok.version>1.18.36</lombok.version>
@@ -34,5 +36,6 @@
 
     <modules>
         <module>backend</module>
+        <module>gateway</module>
     </modules>
 </project>

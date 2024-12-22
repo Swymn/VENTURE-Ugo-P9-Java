@@ -2,6 +2,8 @@ package fr.swynn.controllers;
 
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +17,8 @@ import jakarta.validation.Valid;
 @RestController
 public class PatientController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PatientController.class);
+    
     private final PatientService patientService;
 
     public PatientController(final PatientService patientService) {
@@ -23,6 +27,7 @@ public class PatientController {
 
     @PutMapping("/patients/{identifier}")
     public ResponseEntity<Patient> updatePatient(final @PathVariable UUID identifier, final @Valid @RequestBody Patient patient) {
+        LOGGER.info("Updating patient with identifier: {}", identifier);
         var updatedPatient = patientService.updatePatient(identifier, patient);
         return updatedPatient
             .map(ResponseEntity::ok)
