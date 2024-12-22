@@ -6,6 +6,7 @@ WORKDIR /app
 COPY . .
 
 WORKDIR /app/medilab
+
 RUN mvn -pl backend -am clean package -DskipTests
 
 ## Stage 2
