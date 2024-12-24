@@ -18,7 +18,7 @@ services:
   backend:
     build:
       context: ../
-      dockerfile: docker/Backend.Dockerfile
+      dockerfile: docker/dockerfiles/Backend.Dockerfile
     container_name: backend-test
     restart: always
     depends_on:
@@ -35,7 +35,7 @@ services:
   gateway:
     build:
       context: ../
-      dockerfile: docker/Gateway.Dockerfile
+      dockerfile: docker/dockerfiles/Gateway.Dockerfile
     container_name: gateway-test
     restart: always
     depends_on:
@@ -47,6 +47,17 @@ services:
     environment:
       - SPRING_CLOUD_GATEWAY_ROUTES_0_URI=http://backend-test:8081
       - SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0=Path=/patients/**
+
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/dockerfiles/Frontend.Dockerfile
+    container_name: frontend-test
+    restart: always
+    networks:
+      - medilab-network-test
+    ports:
+      - "80:80"
 
 networks:
   medilab-network-test:

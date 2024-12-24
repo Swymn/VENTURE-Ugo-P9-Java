@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   database:
-    image: oc-9-database:latest
+    build:
+      context: ../
+      dockerfile: docker/dockerfiles/Database.Dockerfile
     container_name: database
     restart: always
     networks:
@@ -16,7 +18,7 @@ services:
   backend:
     build:
       context: ../
-      dockerfile: docker/Backend.Dockerfile
+      dockerfile: docker/dockerfiles/Backend.Dockerfile
     container_name: backend
     restart: always
     depends_on:
@@ -33,7 +35,7 @@ services:
   gateway:
     build:
       context: ../
-      dockerfile: docker/Gateway.Dockerfile
+      dockerfile: docker/dockerfiles/Gateway.Dockerfile
     container_name: gateway
     restart: always
     depends_on:
@@ -45,6 +47,17 @@ services:
     environment:
       - SPRING_CLOUD_GATEWAY_ROUTES_0_URI=http://backend:8081
       - SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0=Path=/patients/**
+
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/dockerfiles/Frontend.Dockerfile
+    container_name: frontend
+    restart: always
+    networks:
+      - medilab-network
+    ports:
+      - "80:80"
 
 networks:
   medilab-network:
