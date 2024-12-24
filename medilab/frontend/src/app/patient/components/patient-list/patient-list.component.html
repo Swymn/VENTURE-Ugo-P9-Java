@@ -1,1 +1,20 @@
-<p>patient-list works!</p>
+<section>
+  <h1>Liste des patients</h1>
+
+  @if (error !== undefined) {
+    <div>
+      <p>{{ error }}</p>
+    </div>
+  } @else {
+    <ul>
+      @for (patient of patients; track patient) {
+        <li>
+          <div>
+            <p>Patient x</p>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>
+

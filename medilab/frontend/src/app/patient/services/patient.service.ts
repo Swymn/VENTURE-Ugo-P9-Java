@@ -10,6 +10,10 @@ export class PatientService {
 
   constructor(private apiService: ApiService) { }
 
+  /**
+   * Fetches all patients from the API.
+   * @returns {Observable<Patient[]>} An observable of the list of patients.
+   */
   findAllPatients(): Observable<Patient[]> {
     return this.apiService.get<Patient[]>('/patients');
   }
