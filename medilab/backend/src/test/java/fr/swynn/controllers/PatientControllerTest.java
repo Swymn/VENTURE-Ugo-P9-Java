@@ -4,15 +4,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatusCode;
 
 import fr.swynn.models.Patient;
-import fr.swynn.services.FakePatientService;
+import fr.swynn.services.PatientService;
 
 class PatientControllerTest {
 
@@ -23,11 +25,12 @@ class PatientControllerTest {
     private static final String DEFAULT_DATE = "2023-10-01T00:00:00Z";
     
     private PatientController patientController;
+    private PatientService mockService;
 
     @BeforeEach
     void setUp() {
-        var fakePatientService = new FakePatientService();
-        patientController = new PatientController(fakePatientService);
+        mockService = Mockito.mock(PatientService.class);
+        patientController = new PatientController(mockService);
     }
 
     private Patient createFakePatient(final UUID identifier, final String firstName, final String lastName) throws ParseException {
@@ -51,6 +54,7 @@ class PatientControllerTest {
         var patient = createFakePatient(patientIdentifier, newFirstName, newLastName);
 
         // WHEN updating the patient first name
+        Mockito.when(mockService.updatePatient(patientIdentifier, patient)).thenReturn(Optional.of(patient));
         var response = patientController.updatePatient(patientIdentifier, patient);
 
         // THEN the patient first name should be updated
@@ -69,6 +73,7 @@ class PatientControllerTest {
         var patient = createFakePatient(patientIdentifier, newFirstName, newLastName);
 
         // WHEN updating the patient first name
+        Mockito.when(mockService.updatePatient(patientIdentifier, patient)).thenReturn(Optional.empty());
         var response = patientController.updatePatient(patientIdentifier, patient);
 
         // THEN the patient should not be found
@@ -83,6 +88,7 @@ class PatientControllerTest {
         var patient = createFakePatient(patientIdentifier, newPhoneNumber);
 
         // WHEN updating the patient first name
+        Mockito.when(mockService.updatePatient(patientIdentifier, patient)).thenReturn(Optional.of(patient));
         var response = patientController.updatePatient(patientIdentifier, patient);
 
         // THEN the patient first name should be updated
