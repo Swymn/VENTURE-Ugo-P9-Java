@@ -34,6 +34,6 @@ public class DefaultPatientService implements PatientService {
      */
     @Override
     public Collection<Patient> getPatients() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return patientRepository.findAll();
     }
 }

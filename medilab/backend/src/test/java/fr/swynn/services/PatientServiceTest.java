@@ -3,7 +3,9 @@ package fr.swynn.services;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
@@ -63,5 +65,33 @@ class PatientServiceTest {
 
         // THEN the patient should not be updated
         Assertions.assertTrue(updatedPatient.isEmpty());
+    }
+
+    @Test
+    void getPatients_shouldReturnEmptyList_noPatients() {
+        // GIVEN a patient service
+        // WHEN getting all patients
+        Mockito.when(patientRepository.findAll()).thenReturn(Collections.emptyList());
+        var patients = patientService.getPatients();
+
+        // THEN an empty list should be returned
+        Assertions.assertTrue(patients.isEmpty());
+    }
+
+    @Test
+    void getPatients_shouldReturnPatients_patientsExist() throws ParseException {
+        // GIVEN a patient service
+        // AND existing patients
+        var uuid1 = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        var patient1 = createFakePatient(uuid1);
+        var uuid2 = UUID.fromString("550e8400-e29b-41d4-a716-446655440001");
+        var patient2 = createFakePatient(uuid2);
+
+        // WHEN getting all patients
+        Mockito.when(patientRepository.findAll()).thenReturn(List.of(patient1, patient2));
+        var patients = patientService.getPatients();
+
+        // THEN the patients should be returned
+        Assertions.assertEquals(2, patients.size());
     }
 }
