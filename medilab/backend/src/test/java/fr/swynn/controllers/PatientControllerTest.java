@@ -3,6 +3,7 @@ package fr.swynn.controllers;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -95,5 +96,18 @@ class PatientControllerTest {
         var updatedPatient = response.getBody();
         Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         Assertions.assertEquals(newPhoneNumber, updatedPatient.getPhoneNumber());
+    }
+
+    @Test
+    void getPatients_noPatients_emptyList() {
+        // GIVEN a patient controller with no patients
+        // WHEN getting the patients
+        Mockito.when(mockService.getPatients()).thenReturn(Collections.emptyList());
+        var response = patientController.getPatients();
+
+        // THEN the patient list should be empty
+        var patients = response.getBody();
+        Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+        Assertions.assertTrue(patients.isEmpty());
     }
 }

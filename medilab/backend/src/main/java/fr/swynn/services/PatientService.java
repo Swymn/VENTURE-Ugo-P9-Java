@@ -1,5 +1,6 @@
 package fr.swynn.services;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,4 +15,10 @@ public interface PatientService {
      * @return the updated patient
      */
     Optional<Patient> updatePatient(UUID patientIdentifier, Patient patient);
+
+    /**
+     * Get all patients
+     * @return all patients
+     */
+    Collection<Patient> getPatients();
 }

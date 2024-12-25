@@ -1,5 +1,6 @@
 package fr.swynn.services;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,4 +28,12 @@ public class DefaultPatientService implements PatientService {
         }
         return Optional.of(patientRepository.save(patient));
     } 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Patient> getPatients() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

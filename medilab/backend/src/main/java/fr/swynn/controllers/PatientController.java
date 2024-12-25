@@ -1,5 +1,6 @@
 package fr.swynn.controllers;
 
+import java.util.Collection;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.swynn.models.Patient;
 import fr.swynn.services.PatientService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController
 public class PatientController {
@@ -27,10 +30,17 @@ public class PatientController {
 
     @PutMapping("/patients/{identifier}")
     public ResponseEntity<Patient> updatePatient(final @PathVariable UUID identifier, final @Valid @RequestBody Patient patient) {
-        LOGGER.info("Updating patient with identifier: {}", identifier);
+        LOGGER.debug("Updating patient with identifier: {}", identifier);
         var updatedPatient = patientService.updatePatient(identifier, patient);
         return updatedPatient
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/patients")
+    public ResponseEntity<Collection<Patient>> getPatients() {
+        LOGGER.debug("Retrieving all patients");
+        var patients = patientService.getPatients();
+        return ResponseEntity.ok(patients);
     }
 }
