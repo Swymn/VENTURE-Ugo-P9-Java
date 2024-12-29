@@ -30,6 +30,20 @@ describe('PatientService', () => {
     httpMock.verify();
   });
 
+  function createFakePatient(identifier: string): Patient {
+    return {
+      identifier,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      address: '123 Main St',
+      phoneNumber: '555-555-5555',
+      gender: 'Male'
+    }
+  }
+
   test('should be created', () => {
     // GIVEN a patient service
     // WHEN it is created
@@ -57,7 +71,7 @@ describe('PatientService', () => {
   test('should return an Observable of Patient[] with 2 patients', () => {
     // GIVEN a patient service
     // AND a mocked response with 2 patients
-    const mockedPatients: Patient[] = [{}, {}];
+    const mockedPatients: Patient[] = [createFakePatient('1'), createFakePatient('2')];
     jest.spyOn(apiService, 'get').mockReturnValue(of(mockedPatients));
 
     // WHEN the findAllPatients method is called

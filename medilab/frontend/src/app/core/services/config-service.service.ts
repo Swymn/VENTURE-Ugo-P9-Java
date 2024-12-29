@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Config } from '../models/config';
+import { Config } from '../models/config.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class ConfigServiceService {
     });
   }
 
-  getConfig(key: keyof Config): any {
+  getConfig(key: keyof Config): unknown {
     return this.config ? this.config[key] : null;
   }
 }

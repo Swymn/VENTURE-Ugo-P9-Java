@@ -4,7 +4,6 @@ import { HomeComponent } from "./home/home.component";
 import { CoreModule } from "../core/core.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { PatientModule } from "../patient/patient.module";
-import { provideHttpClient } from "@angular/common/http";
 
 @NgModule({
   declarations: [

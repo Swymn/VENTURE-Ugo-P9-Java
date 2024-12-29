@@ -15,8 +15,8 @@ export class PatientListComponent implements OnInit{
 
   ngOnInit() {
     this.service.findAllPatients().subscribe({
-      next: patients => this.patients = patients,
-      error: error => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
+      next: (patients) => this.patients = patients,
+      error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
     });
   }
 }
