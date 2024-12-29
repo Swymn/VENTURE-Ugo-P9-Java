@@ -15,6 +15,6 @@ export class PatientService {
    * @returns {Observable<Patient[]>} An observable of the list of patients.
    */
   findAllPatients(): Observable<Patient[]> {
-    return this.apiService.get<Patient[]>('/patients');
+    return this.apiService.get<Patient[]>('patients');
   }
 }

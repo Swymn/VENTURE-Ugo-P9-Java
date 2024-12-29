@@ -6,7 +6,7 @@ import { Config } from '../models/config.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigServiceService {
+export class ConfigService {
   private static readonly CONFIG_ROUTE = '/assets/config.json';
   private config: Config | null;
 
@@ -15,7 +15,7 @@ export class ConfigServiceService {
   }
 
   loadConfig(): Subscription {
-    return this.http.get(ConfigServiceService.CONFIG_ROUTE).subscribe({
+    return this.http.get(ConfigService.CONFIG_ROUTE).subscribe({
       next: (config) => {
         this.config = config as Config;
       },

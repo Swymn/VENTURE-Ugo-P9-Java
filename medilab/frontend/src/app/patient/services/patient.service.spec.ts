@@ -27,6 +27,8 @@ describe('PatientService', () => {
   });
 
   afterEach(() => {
+    const req = httpMock.expectOne('/assets/config.json');
+    req.flush({});
     httpMock.verify();
   });
 
@@ -56,6 +58,7 @@ describe('PatientService', () => {
     // WHEN it is created
     // THEN it should have a findAllPatients method
     expect(service.findAllPatients).toBeDefined();
+
   });
 
   test('should return an Observable of Patient[]', () => {
