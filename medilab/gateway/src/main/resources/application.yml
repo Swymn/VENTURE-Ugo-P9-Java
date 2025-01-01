@@ -6,6 +6,19 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/patients/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders:
+              - "*"
+            allowCredentials: false
+            maxAge: 3600
 
   application:
     name: gateway

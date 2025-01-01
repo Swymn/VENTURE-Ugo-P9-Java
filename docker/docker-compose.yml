@@ -58,6 +58,8 @@ services:
       - medilab-network
     ports:
       - "80:80"
+    environment:
+      - API_URL=http://gateway:8080
 
 networks:
   medilab-network:

@@ -58,6 +58,8 @@ services:
       - medilab-network-test
     ports:
       - "80:80"
+    environment:
+      - API_URL=http://localhost:8080
 
 networks:
   medilab-network-test:
