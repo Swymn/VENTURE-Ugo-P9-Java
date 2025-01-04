@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   database:
-    image: oc-9-database:latest
+    build:
+      context: ../
+      dockerfile: docker/dockerfiles/Database.Dockerfile
     container_name: database-test
     restart: always
     networks:
