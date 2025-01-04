@@ -1,20 +1,33 @@
-<section>
-  <h1>Liste des patients</h1>
+<section class="flex flex-col justify-center items-center space-y-4 my-10">
+  <h1 class="font-bold text-3xl">Patients List</h1>
 
   @if (error !== undefined) {
     <div>
       <p>{{ error }}</p>
     </div>
   } @else {
-    <ul>
-      @for (patient of patients; track patient) {
-        <li>
-          <div>
-            <p>Patient x</p>
-          </div>
-        </li>
-      }
-    </ul>
+    <table>
+      <thead class="w-full border-collapse">
+        <tr>
+          <th class="px-4 py-2">Firstname</th>
+          <th class="px-4 py-2">Lastname</th>
+          <th class="px-4 py-2">Birthdate</th>
+          <th class="px-4 py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (patient of patients; track patient) {
+          <tr class="border rounded-xl">
+            <td class="px-4 py-2">{{ patient.firstName }}</td>
+            <td class="px-4 py-2">{{ patient.lastName }}</td>
+            <td class="px-4 py-2">{{ patient.birthDate | date: 'longDate' }}</td>
+            <td class="px-4 py-2">
+              <button class="px-4 py-2 bg-blue-500 text-white rounded-xl" (click)="onEdit(patient.identifier)">Edit</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   }
 </section>
 

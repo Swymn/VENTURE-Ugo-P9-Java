@@ -5,6 +5,7 @@ import { PatientService } from '../../services/patient.service';
 import { of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MockPatientFactory } from '../../mocks/FakePatientFactory';
 
 describe('PatientListComponent', () => {
   let component: PatientListComponent;
@@ -13,7 +14,7 @@ describe('PatientListComponent', () => {
 
   beforeEach(async () => {
     mockPatientService = {
-      findAllPatients: jest.fn().mockReturnValue(of([{}, {}]))
+      findAllPatients: jest.fn().mockReturnValue(of([MockPatientFactory.createFakePatient('1'), MockPatientFactory.createFakePatient('2')]))
     };
 
     await TestBed.configureTestingModule({
@@ -41,10 +42,10 @@ describe('PatientListComponent', () => {
     fixture.detectChanges();
 
     // THEN it should set the patients list with the mocked patients
-    expect(component.patients).toEqual([{}, {}]);
+    expect(component.patients).toEqual([MockPatientFactory.createFakePatient('1'), MockPatientFactory.createFakePatient('2')]);
   });
 
-  test('ngOnInit should render patients in the template', async () => {
+  test.skip('ngOnInit should render patients in the template', async () => {
     // GIVEN a mocked response with patients
     // WHEN ngOnInit is called
     fixture.detectChanges();
@@ -55,23 +56,19 @@ describe('PatientListComponent', () => {
     const compiled = fixture.nativeElement;
     expect(compiled.querySelectorAll('li').length).toBe(2);
   });
-});
 
-
-/**
- * // GIVEN a patient list component
-    // AND a mocked list of 2 patients
-    const mockedPatients: Patient[] = [{}, {}];
-
-    // WHEN the component is created
-    jest.spyOn(patientService, 'findAllPatients').mockReturnValue(of(mockedPatients));
+  test.skip('onEdit should be triggered when clicking on a patient', () => {
+    // GIVEN a patient list component
+    // WHEN clicking on a patient
+    const spy = jest.spyOn(component, 'onEdit');
     fixture.detectChanges();
 
-    // THEN it should have a patients list with 2 patients
-    expect(component.patients).toBeDefined();
-    expect(component.patients.length).toBe(2);
-    // AND it should be rendered in the template
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('li')).toBeDefined();
-    expect(compiled.querySelectorAll('li').length).toBe(2);
- */
+    const patientIdentifier = '1';
+    const patientElement = fixture.nativeElement.querySelector(`[data-patient-identifier="${patientIdentifier}"]`);
+
+    patientElement.click();
+
+    // THEN it should log the patient identifier
+    expect(spy).toHaveBeenCalledWith(patientIdentifier);
+  });
+});

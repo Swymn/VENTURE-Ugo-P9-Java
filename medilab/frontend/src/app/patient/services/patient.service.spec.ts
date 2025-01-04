@@ -6,6 +6,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Patient } from '../models/patient.model';
 import { of, Observable } from 'rxjs';
+import { MockPatientFactory } from '../mocks/FakePatientFactory';
 
 describe('PatientService', () => {
   let service: PatientService;
@@ -31,20 +32,6 @@ describe('PatientService', () => {
     req.flush({});
     httpMock.verify();
   });
-
-  function createFakePatient(identifier: string): Patient {
-    return {
-      identifier,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01',
-      firstName: 'John',
-      lastName: 'Doe',
-      birthDate: '1980-01-01',
-      address: '123 Main St',
-      phoneNumber: '555-555-5555',
-      gender: 'Male'
-    }
-  }
 
   test('should be created', () => {
     // GIVEN a patient service
@@ -74,7 +61,7 @@ describe('PatientService', () => {
   test('should return an Observable of Patient[] with 2 patients', () => {
     // GIVEN a patient service
     // AND a mocked response with 2 patients
-    const mockedPatients: Patient[] = [createFakePatient('1'), createFakePatient('2')];
+    const mockedPatients: Patient[] = [MockPatientFactory.createFakePatient('1'), MockPatientFactory.createFakePatient('2')];
     jest.spyOn(apiService, 'get').mockReturnValue(of(mockedPatients));
 
     // WHEN the findAllPatients method is called
