@@ -94,4 +94,41 @@ describe('PatientService', () => {
       }
     });
   });
+
+  test('Should update the given patient', () => {
+    // GIVEN a patient service
+    // AND a mocked patient to update
+    const patient = MockPatientFactory.createFakePatient('1');
+    jest.spyOn(apiService, 'put').mockReturnValue(of(patient));
+
+    // WHEN the updatePatient method is called
+    const updatedPatient = service.updatePatient(patient);
+
+    // THEN it should return an Observable of the updated patient
+    updatedPatient.subscribe({
+      next: (data) => {
+        expect(data).toEqual(patient);
+      },
+      error: () => fail('expected patient, not error!')
+    });
+  });
+
+  test('Should return an Observable with an error when updating a patient', () => {
+    // GIVEN a patient service
+    // AND a mocked patient to update
+    const patient = MockPatientFactory.createFakePatient('1');
+    const error = new Error('An error occurred');
+    jest.spyOn(apiService, 'put').mockReturnValue(of(error));
+
+    // WHEN the updatePatient method is called
+    const updatedPatient = service.updatePatient(patient);
+
+    // THEN it should return an Observable with an error
+    updatedPatient.subscribe({
+      next: () => fail('expected error, not patient!'),
+      error: (err) => {
+        expect(err).toEqual(error);
+      }
+    });
+  });
 });

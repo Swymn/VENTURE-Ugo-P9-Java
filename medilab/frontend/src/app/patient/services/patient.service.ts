@@ -17,4 +17,13 @@ export class PatientService {
   findAllPatients(): Observable<Patient[]> {
     return this.apiService.get<Patient[]>('patients');
   }
+
+  /**
+   * Update a patient.
+   * @param {Patient} patient The patient to update.
+   * @returns {Observable<Patient>} An observable of the updated patient.
+   */
+  updatePatient(patient: Patient): Observable<Patient> {
+    return this.apiService.put<Patient>(`patients/${patient.identifier}`, patient);
+  }
 }
