@@ -6,11 +6,15 @@ import { of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MockPatientFactory } from '../../mocks/FakePatientFactory';
+import { provideRouter, RouterModule } from '@angular/router';
+import { PatientUpdateFormComponent } from '../patient-update-form/patient-update-form.component';
+import { Location } from '@angular/common';
 
 describe('PatientListComponent', () => {
   let component: PatientListComponent;
   let fixture: ComponentFixture<PatientListComponent>;
   let mockPatientService: Partial<PatientService>;
+  let location: Location;
 
   beforeEach(async () => {
     mockPatientService = {
@@ -19,16 +23,19 @@ describe('PatientListComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [PatientListComponent],
+      imports: [RouterModule],
       providers: [
         { provide: PatientService, useValue: mockPatientService },
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        provideRouter([{ path: 'patients/update/:id', component: PatientUpdateFormComponent }])
       ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(PatientListComponent);
     component = fixture.componentInstance;
+    location = TestBed.inject(Location);
     fixture.detectChanges();
   });
 
@@ -57,16 +64,16 @@ describe('PatientListComponent', () => {
     expect(compiled.querySelectorAll('tr').length).toBe(3); // 1 header + 2 patients
   });
 
-  test('onEdit should be triggered when clicking on a patient', () => {
-    // GIVEN a patient list component
-    const spy = jest.spyOn(component, 'onEdit');
+  test('Should navigate to the update form when clicking on a patient', async () => {
+    // GIVEN a mocked response with patients
+    fixture.detectChanges();
 
-    // WHEN clicking on a patient
-    const patientElement = fixture.debugElement.queryAll((element) => element.name === 'button')[0];
-    patientElement.nativeElement.click();
+    // WHEN user clicks on a patient
+    const patientLink = fixture.debugElement.queryAll((element) => element.name === 'a')[0];
+    patientLink.nativeElement.click();
+    fixture.detectChanges();
 
-    // THEN it should log the patient identifier
-    const patientIdentifier = '1';
-    expect(spy).toHaveBeenCalledWith(patientIdentifier);
+    // THEN it should navigate to the update form when clicking on a patient
+    expect(location.path()).toBe('/patients/update/1');
   });
 });

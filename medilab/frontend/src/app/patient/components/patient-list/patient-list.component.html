@@ -22,7 +22,7 @@
             <td class="px-4 py-2">{{ patient.lastName }}</td>
             <td class="px-4 py-2">{{ patient.birthDate | date: 'longDate' }}</td>
             <td class="px-4 py-2">
-              <button class="px-4 py-2 bg-blue-500 text-white rounded-xl" (click)="onEdit(patient.identifier)">Edit</button>
+              <a routerLink="/patients/update/{{ patient.identifier }}" class="text-blue-500">View</a>
             </td>
           </tr>
         }

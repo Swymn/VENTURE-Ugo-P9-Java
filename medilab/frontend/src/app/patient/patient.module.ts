@@ -4,6 +4,7 @@ import { PatientListComponent } from './components/patient-list/patient-list.com
 import { PatientRoutingModule } from './patient-routing.module';
 import { ConfigService } from '../core/services/config.service';
 import { Subscription } from 'rxjs';
+import { PatientUpdateFormComponent } from './components/patient-update-form/patient-update-form.component';
 
 export function initializePatientModule(configService: ConfigService): () => Subscription {
   return () => configService.loadConfig();
@@ -11,7 +12,8 @@ export function initializePatientModule(configService: ConfigService): () => Sub
 
 @NgModule({
   declarations: [
-    PatientListComponent
+    PatientListComponent,
+    PatientUpdateFormComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ export function initializePatientModule(configService: ConfigService): () => Sub
     }
   ],
   exports: [
-    PatientListComponent
+    PatientListComponent,
+    PatientUpdateFormComponent
   ]
 })
 export class PatientModule { }

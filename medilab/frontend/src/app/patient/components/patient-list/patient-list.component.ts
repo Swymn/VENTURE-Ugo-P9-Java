@@ -19,8 +19,4 @@ export class PatientListComponent implements OnInit{
       error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
     });
   }
-
-  onEdit(patientIdentifier: string) {
-    console.log(patientIdentifier);
-  }
 }
