@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (patient of patients; track patient) {
+        @for (patient of patients; track patient.identifier) {
           <tr class="border rounded-xl">
             <td class="px-4 py-2">{{ patient.firstName }}</td>
             <td class="px-4 py-2">{{ patient.lastName }}</td>

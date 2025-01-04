@@ -45,7 +45,7 @@ describe('PatientListComponent', () => {
     expect(component.patients).toEqual([MockPatientFactory.createFakePatient('1'), MockPatientFactory.createFakePatient('2')]);
   });
 
-  test.skip('ngOnInit should render patients in the template', async () => {
+  test('ngOnInit should render patients in the template', async () => {
     // GIVEN a mocked response with patients
     // WHEN ngOnInit is called
     fixture.detectChanges();
@@ -54,21 +54,19 @@ describe('PatientListComponent', () => {
 
     // THEN it should render the patients in the template
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelectorAll('li').length).toBe(2);
+    expect(compiled.querySelectorAll('tr').length).toBe(3); // 1 header + 2 patients
   });
 
-  test.skip('onEdit should be triggered when clicking on a patient', () => {
+  test('onEdit should be triggered when clicking on a patient', () => {
     // GIVEN a patient list component
-    // WHEN clicking on a patient
     const spy = jest.spyOn(component, 'onEdit');
-    fixture.detectChanges();
 
-    const patientIdentifier = '1';
-    const patientElement = fixture.nativeElement.querySelector(`[data-patient-identifier="${patientIdentifier}"]`);
-
-    patientElement.click();
+    // WHEN clicking on a patient
+    const patientElement = fixture.debugElement.queryAll((element) => element.name === 'button')[0];
+    patientElement.nativeElement.click();
 
     // THEN it should log the patient identifier
+    const patientIdentifier = '1';
     expect(spy).toHaveBeenCalledWith(patientIdentifier);
   });
 });
