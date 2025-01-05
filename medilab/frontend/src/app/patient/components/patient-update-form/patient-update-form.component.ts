@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Patient } from '../../models/patient.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -8,10 +8,17 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./patient-update-form.component.css']
 })
 export class PatientUpdateFormComponent implements OnChanges {
-  @Input() patient: Patient | undefined;
-  patientForm: FormGroup = this.initializePatientForm();
+  @Input() patient?: Patient;
+  @Output() updatePatient;
+  @Output() cancelUpdate;
 
-  constructor(private formBuilder: FormBuilder) {}
+  patientForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) {
+    this.patientForm = this.initializePatientForm();
+    this.updatePatient = new EventEmitter<Patient>();
+    this.cancelUpdate = new EventEmitter<void>();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patient'] && changes['patient'].currentValue) {
@@ -19,12 +26,14 @@ export class PatientUpdateFormComponent implements OnChanges {
     }
   }
 
-  onSubmit(): void {
+  onSubmitForm(): void {
     if (this.patientForm.valid) {
-      console.log('Form is valid');
-    } else {
-      console.log('Form is invalid');
+      this.updatePatient.emit(this.toPatient());
     }
+  }
+
+  onCancelUpdate(): void {
+    this.cancelUpdate.emit();
   }
 
   initializePatientForm(patient?: Patient): FormGroup {
@@ -40,5 +49,19 @@ export class PatientUpdateFormComponent implements OnChanges {
 
   toInputDateFormat(date: string): string {
     return date.split('T')[0];
+  }
+
+  toPatient(): Patient {
+    return {
+      identifier: this.patient!.identifier,
+      createdAt: this.patient!.createdAt,
+      updatedAt: this.patient!.updatedAt,
+      firstName: this.patientForm.get('firstName')?.value,
+      lastName: this.patientForm.get('lastName')?.value,
+      address: this.patientForm.get('address')?.value,
+      phoneNumber: this.patientForm.get('phoneNumber')?.value,
+      birthDate: this.patientForm.get('birthDate')?.value,
+      gender: this.patient!.gender
+    };
   }
 }

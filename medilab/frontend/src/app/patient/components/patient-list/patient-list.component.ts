@@ -8,14 +8,16 @@ import { PatientService } from '../../services/patient.service';
   styleUrl: './patient-list.component.css'
 })
 export class PatientListComponent implements OnInit {
-  patients: Patient[] = [];
-  selectedPatient: Patient | undefined;
-  error: string | undefined = undefined;
+  patients: Patient[];
+  selectedPatient?: Patient;
+  error?: string;
 
-  constructor(private service: PatientService) { }
+  constructor(private patientService: PatientService) {
+    this.patients = [];
+  }
 
   ngOnInit() {
-    this.service.findAllPatients().subscribe({
+    this.patientService.findAllPatients().subscribe({
       next: (patients) => this.patients = patients,
       error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
     });
@@ -23,5 +25,19 @@ export class PatientListComponent implements OnInit {
 
   onEdit(patient: Patient) {
     this.selectedPatient = patient;
+  }
+
+  onCancelEdit() {
+    this.selectedPatient = undefined;
+  }
+
+  onSubmit(patient: Patient) {
+    this.patientService.updatePatient(patient).subscribe({
+      next: (updatedPatient) => {
+        this.selectedPatient = undefined;
+        this.patients = this.patients.map(p => p.identifier === updatedPatient.identifier ? updatedPatient : p);
+      },
+      error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
+    });
   }
 }

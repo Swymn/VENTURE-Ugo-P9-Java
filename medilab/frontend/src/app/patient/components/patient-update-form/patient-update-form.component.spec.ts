@@ -22,7 +22,7 @@ describe('PatientUpdateFormComponent', () => {
       ],
       imports: [
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
       ]
     })
     .compileComponents();
@@ -56,7 +56,7 @@ describe('PatientUpdateFormComponent', () => {
     expect(component.patientForm.get('firstName')?.value).toBe('John');
     expect(component.patientForm.get('lastName')?.value).toBe('Doe');
     expect(component.patientForm.get('address')?.value).toBe('123 Main St');
-    expect(component.patientForm.get('phoneNumber')?.value).toBe('555-555-5555');
+    expect(component.patientForm.get('phoneNumber')?.value).toBe('5555555555');
   });
 
   test('should format date', () => {
@@ -101,7 +101,9 @@ describe('PatientUpdateFormComponent', () => {
 
   test('Should submit the form', () => {
     // GIVEN a patient update form component
-    const submitSpy = jest.spyOn(component, 'onSubmit');
+    const submitFormSpy = jest.spyOn(component, 'onSubmitForm');
+    const updatePatientSpy = jest.spyOn(component.updatePatient, 'emit');
+
     // AND a patient
     const patient = MockPatientFactory.createFakePatient('1');
     component.patient = patient;
@@ -125,12 +127,15 @@ describe('PatientUpdateFormComponent', () => {
 
     // THEN the form should be validated
     expect(component.patientForm.valid).toBe(true);
-    expect(submitSpy).toHaveBeenCalled();
+    expect(submitFormSpy).toHaveBeenCalled();
+    expect(updatePatientSpy).toHaveBeenCalled();
   });
 
   test("Should not submit the form if it's invalid", () => {
     // GIVEN a patient update form component
-    const submitSpy = jest.spyOn(component, 'onSubmit');
+    const submitFormSpy = jest.spyOn(component, 'onSubmitForm');
+    const updatePatientSpy = jest.spyOn(component.updatePatient, 'emit');
+
     // AND a patient
     const patient = MockPatientFactory.createFakePatient('1');
     component.patient = patient;
@@ -159,6 +164,21 @@ describe('PatientUpdateFormComponent', () => {
     // THEN the form should not be validated
     expect(component.patientForm.valid).toBe(false);
     expect(component.patientForm.get('firstName')?.invalid).toBe(true);
-    expect(submitSpy).not.toHaveBeenCalled();
+    expect(submitFormSpy).not.toHaveBeenCalled();
+    expect(updatePatientSpy).not.toHaveBeenCalled();
   });
+
+  test("Should emit close modal event", () => {
+    // GIVEN a patient update form component
+    const closeSpy = jest.spyOn(component.cancelUpdate, 'emit');
+    fixture.detectChanges();
+
+    // WHEN the close button is clicked
+    const close = fixture.debugElement.query(By.css('button[type="button"]')).nativeElement;
+    close.click();
+    fixture.detectChanges();
+
+    // THEN it should emit the close event
+    expect(closeSpy).toHaveBeenCalled();
+  })
 });

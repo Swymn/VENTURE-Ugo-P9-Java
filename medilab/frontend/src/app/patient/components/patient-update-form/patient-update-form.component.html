@@ -1,8 +1,11 @@
 <section class="absolute top-0 left-0 w-[100vw] h-[100vh] z-10 flex items-center justify-center">
   <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
-  <form class="opacity-100 bg-white z-20 p-5 rounded-md" method="post" [formGroup]="patientForm" (submit)="onSubmit()">
+  <form class="opacity-100 bg-white z-20 p-5 rounded-md" method="post" [formGroup]="patientForm" (submit)="onSubmitForm()">
 
-    <h1 class="font-bold text-3xl">Update Patient</h1>
+    <div class="flex flex-row justify-between">
+      <h1 class="font-bold text-3xl">Update Patient</h1>
+      <button type="button" (click)="onCancelUpdate()">X</button>
+    </div>
 
     <div class="flex flex-row gap-x-5">
       <div class="flex flex-col mt-5">

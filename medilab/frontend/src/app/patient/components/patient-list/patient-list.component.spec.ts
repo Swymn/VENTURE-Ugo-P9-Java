@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MockPatientFactory } from '../../mocks/FakePatientFactory';
+import { PatientUpdateFormComponent } from '../patient-update-form/patient-update-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('PatientListComponent', () => {
   let component: PatientListComponent;
@@ -14,15 +16,20 @@ describe('PatientListComponent', () => {
 
   beforeEach(async () => {
     mockPatientService = {
-      findAllPatients: jest.fn().mockReturnValue(of([MockPatientFactory.createFakePatient('1'), MockPatientFactory.createFakePatient('2')]))
+      findAllPatients: jest.fn().mockReturnValue(of([MockPatientFactory.createFakePatient('1'), MockPatientFactory.createFakePatient('2')])),
+      updatePatient: (patient) => jest.fn().mockReturnValue(of(patient))()
     };
 
     await TestBed.configureTestingModule({
-      declarations: [PatientListComponent],
+      declarations: [PatientListComponent, PatientUpdateFormComponent],
       providers: [
         { provide: PatientService, useValue: mockPatientService },
         provideHttpClient(),
         provideHttpClientTesting(),
+      ],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
       ]
     })
     .compileComponents();
@@ -68,5 +75,29 @@ describe('PatientListComponent', () => {
 
     // THEN it should navigate to the update form when clicking on a patient
     expect(component.selectedPatient).toBeDefined();
+  });
+
+  test('Should update patients on form submit', async () => {
+    // GIVEN a mocked response with patients
+    fixture.detectChanges();
+
+    // WHEN user submit patient update
+    const patient = MockPatientFactory.createFakePatient('1');
+    patient.firstName = 'Jane';
+    component.onSubmit(patient);
+
+    // THEN it should update the patient list
+    expect(component.patients[0].firstName).toBe('Jane');
+  });
+
+  test('Should cancel update', async () => {
+    // GIVEN a mocked response with patients
+    fixture.detectChanges();
+
+    // WHEN user cancel the update
+    component.onCancelEdit();
+
+    // THEN it should cancel the update
+    expect(component.selectedPatient).toBeUndefined();
   });
 });
