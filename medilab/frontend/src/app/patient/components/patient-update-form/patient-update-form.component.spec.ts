@@ -6,7 +6,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { MockPatientFactory } from '../../mocks/FakePatientFactory';
 import { By } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('PatientUpdateFormComponent', () => {
   let component: PatientUpdateFormComponent;
@@ -14,35 +14,25 @@ describe('PatientUpdateFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PatientUpdateFormComponent ],
+      declarations: [PatientUpdateFormComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([])
       ],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-      ]
+      imports: [ReactiveFormsModule]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(PatientUpdateFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
 
-  test('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  test('should initialize form', async () => {
-    // GIVEN a patient update form component
-    // AND a patient
+    // Inject the patient to update
     const patient = MockPatientFactory.createFakePatient('1');
     component.patient = patient;
 
-    // WHEN the component is initialized
+    // Initialize the form
     component.ngOnChanges({
       patient: {
         currentValue: patient,
@@ -52,11 +42,11 @@ describe('PatientUpdateFormComponent', () => {
       }
     });
 
-    // THEN the form should be initialized with the patient data
-    expect(component.patientForm.get('firstName')?.value).toBe('John');
-    expect(component.patientForm.get('lastName')?.value).toBe('Doe');
-    expect(component.patientForm.get('address')?.value).toBe('123 Main St');
-    expect(component.patientForm.get('phoneNumber')?.value).toBe('5555555555');
+    fixture.detectChanges();
+  });
+
+  test('should create', () => {
+    expect(component).toBeTruthy();
   });
 
   test('should format date', () => {
@@ -70,24 +60,19 @@ describe('PatientUpdateFormComponent', () => {
     expect(formattedDate).toBe('2021-01-01');
   });
 
-  test('Should setup the form in the render', () => {
-    // GIVEN a patient update form component
-    // AND a patient
-    const patient = MockPatientFactory.createFakePatient('1');
-    component.patient = patient;
-    fixture.detectChanges();
-
+  test('should initialize form', async () => {
+    // GIVEN a patient update form component with a patient
     // WHEN the component is initialized
-    component.ngOnChanges({
-      patient: {
-        currentValue: patient,
-        previousValue: undefined,
-        firstChange: true,
-        isFirstChange: () => true
-      }
-    });
-    fixture.detectChanges();
+    // THEN the form should be initialized with the patient data
+    expect(component.patientForm.get('firstName')?.value).toBe('John');
+    expect(component.patientForm.get('lastName')?.value).toBe('Doe');
+    expect(component.patientForm.get('address')?.value).toBe('123 Main St');
+    expect(component.patientForm.get('phoneNumber')?.value).toBe('5555555555');
+  });
 
+  test('Should setup the form in the render', () => {
+    // GIVEN a patient update form component with a patient
+    // WHEN the component is initialized
     // THEN the form should be initialized with the patient data
     const firstNameInput = fixture.debugElement.query(By.css('input[formControlName="firstName"]')).nativeElement;
     expect(firstNameInput.value).toBe('John');
@@ -100,27 +85,11 @@ describe('PatientUpdateFormComponent', () => {
   });
 
   test('Should submit the form', () => {
-    // GIVEN a patient update form component
+    // GIVEN a patient update form component with a patient
     const submitFormSpy = jest.spyOn(component, 'onSubmitForm');
     const updatePatientSpy = jest.spyOn(component.updatePatient, 'emit');
 
-    // AND a patient
-    const patient = MockPatientFactory.createFakePatient('1');
-    component.patient = patient;
-    fixture.detectChanges();
-
-    // WHEN the component is initialized
-    component.ngOnChanges({
-      patient: {
-        currentValue: patient,
-        previousValue: undefined,
-        firstChange: true,
-        isFirstChange: () => true
-      }
-    });
-    fixture.detectChanges();
-
-    // AND the form is submitted
+    // WHEN the form is submitted
     const submit = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
     submit.click();
     fixture.detectChanges();
@@ -132,31 +101,14 @@ describe('PatientUpdateFormComponent', () => {
   });
 
   test("Should not submit the form if it's invalid", () => {
-    // GIVEN a patient update form component
+    // GIVEN a patient update form component with a patient
     const submitFormSpy = jest.spyOn(component, 'onSubmitForm');
     const updatePatientSpy = jest.spyOn(component.updatePatient, 'emit');
 
-    // AND a patient
-    const patient = MockPatientFactory.createFakePatient('1');
-    component.patient = patient;
-    fixture.detectChanges();
-
-    // WHEN the component is initialized
-    component.ngOnChanges({
-      patient: {
-        currentValue: patient,
-        previousValue: undefined,
-        firstChange: true,
-        isFirstChange: () => true
-      }
-    });
-    fixture.detectChanges();
-
-    // AND the form updated
+    // WHEN the form is updated with an invalid value
     component.patientForm.get('firstName')?.setValue('');
     fixture.detectChanges();
-
-    // AND the form is submitted
+    // AND submitted
     const submit = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
     submit.click();
     fixture.detectChanges();
