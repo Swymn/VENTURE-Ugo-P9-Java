@@ -8,29 +8,38 @@
       <div class="flex flex-col mt-5">
         <label for="firstName">First Name</label>
         <input class="border rounded-md p-2.5" type="text" id="firstName" name="firstName" formControlName="firstName" required>
+        <span *ngIf="patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched" class="text-red-500">{{ patientForm.get('firstName')?.errors | json }}</span>
       </div>
 
       <div class="flex flex-col mt-5">
         <label for="lastName">Last Name</label>
         <input class="border rounded-md p-2.5" type="text" id="lastName" name="lastName" formControlName="lastName" required>
+        <span *ngIf="patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched" class="text-red-500">{{ patientForm.get('lastName')?.errors | json }}</span>
       </div>
     </div>
 
     <div class="flex flex-col mt-5">
       <label for="address">Address</label>
       <input class="border rounded-md p-2.5" type="text" id="address" name="address" formControlName="address">
+      <span *ngIf="patientForm.get('address')?.invalid && patientForm.get('address')?.touched" class="text-red-500">{{ patientForm.get('address')?.errors | json }}</span>
     </div>
 
     <div class="flex flex-row gap-x-5">
       <div class="flex flex-col mt-5">
         <label for="phoneNumber">Phone Number</label>
         <input class="border rounded-md p-2.5" type="tel" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber">
+        <span *ngIf="patientForm.get('phoneNumber')?.invalid && patientForm.get('phoneNumber')?.touched" class="text-red-500">{{ patientForm.get('phoneNumber')?.errors | json }}</span>
       </div>
 
       <div class="flex flex-col mt-5">
         <label for="birthDate">Date of Birth</label>
         <input class="border rounded-md p-2.5" type="date" id="birthDate" name="birthDate" formControlName="birthDate" required>
+        <span *ngIf="patientForm.get('birthDate')?.invalid && patientForm.get('birthDate')?.touched" class="text-red-500">{{ patientForm.get('birthDate')?.errors | json }}</span>
       </div>
+    </div>
+
+    <div class="flex flex-row gap-x-5">
+      <button class="{{ patientForm.valid ? 'bg-blue-500' : 'bg-gray-400' }} w-full text-white rounded-md p-2.5 mt-5" type="submit" [disabled]="!(patientForm.valid)">Update</button>
     </div>
   </form>
 </section>

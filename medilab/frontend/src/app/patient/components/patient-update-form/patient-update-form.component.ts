@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Patient } from '../../models/patient.model';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-patient-update-form',
@@ -10,6 +10,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class PatientUpdateFormComponent implements OnChanges {
   @Input() patient: Patient | undefined;
   patientForm: FormGroup = this.initializePatientForm();
+
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patient'] && changes['patient'].currentValue) {
@@ -26,7 +28,7 @@ export class PatientUpdateFormComponent implements OnChanges {
   }
 
   initializePatientForm(patient?: Patient): FormGroup {
-    return new FormGroup({
+    return this.formBuilder.group({
       firstName: new FormControl(patient?.firstName, [Validators.required]),
       lastName: new FormControl(patient?.lastName, [Validators.required]),
       address: new FormControl(patient?.address, []),

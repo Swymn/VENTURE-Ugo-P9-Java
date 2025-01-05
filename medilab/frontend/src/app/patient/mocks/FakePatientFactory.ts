@@ -11,7 +11,7 @@ export class MockPatientFactory {
       lastName: 'Doe',
       birthDate: '1980-01-01',
       address: '123 Main St',
-      phoneNumber: '555-555-5555',
+      phoneNumber: '5555555555',
       gender: 'Male'
     }
   }

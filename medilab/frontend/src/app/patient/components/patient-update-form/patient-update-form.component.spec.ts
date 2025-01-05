@@ -94,5 +94,71 @@ describe('PatientUpdateFormComponent', () => {
 
     const lastNameInput = fixture.debugElement.query(By.css('input[formControlName="lastName"]')).nativeElement;
     expect(lastNameInput.value).toBe('Doe');
+
+    const addressInput = fixture.debugElement.query(By.css('input[formControlName="address"]')).nativeElement;
+    expect(addressInput.value).toBe('123 Main St');
+  });
+
+  test('Should submit the form', () => {
+    // GIVEN a patient update form component
+    const submitSpy = jest.spyOn(component, 'onSubmit');
+    // AND a patient
+    const patient = MockPatientFactory.createFakePatient('1');
+    component.patient = patient;
+    fixture.detectChanges();
+
+    // WHEN the component is initialized
+    component.ngOnChanges({
+      patient: {
+        currentValue: patient,
+        previousValue: undefined,
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+    fixture.detectChanges();
+
+    // AND the form is submitted
+    const submit = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    submit.click();
+    fixture.detectChanges();
+
+    // THEN the form should be validated
+    expect(component.patientForm.valid).toBe(true);
+    expect(submitSpy).toHaveBeenCalled();
+  });
+
+  test("Should not submit the form if it's invalid", () => {
+    // GIVEN a patient update form component
+    const submitSpy = jest.spyOn(component, 'onSubmit');
+    // AND a patient
+    const patient = MockPatientFactory.createFakePatient('1');
+    component.patient = patient;
+    fixture.detectChanges();
+
+    // WHEN the component is initialized
+    component.ngOnChanges({
+      patient: {
+        currentValue: patient,
+        previousValue: undefined,
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+    fixture.detectChanges();
+
+    // AND the form updated
+    component.patientForm.get('firstName')?.setValue('');
+    fixture.detectChanges();
+
+    // AND the form is submitted
+    const submit = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    submit.click();
+    fixture.detectChanges();
+
+    // THEN the form should not be validated
+    expect(component.patientForm.valid).toBe(false);
+    expect(component.patientForm.get('firstName')?.invalid).toBe(true);
+    expect(submitSpy).not.toHaveBeenCalled();
   });
 });
