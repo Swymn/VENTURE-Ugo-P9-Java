@@ -1,1 +1,36 @@
-<p>patient-update-form works!</p>
+<section class="absolute top-0 left-0 w-[100vw] h-[100vh] z-10 flex items-center justify-center">
+  <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+  <form class="opacity-100 bg-white z-20 p-5 rounded-md" method="post" [formGroup]="patientForm" (submit)="onSubmit()">
+
+    <h1 class="font-bold text-3xl">Update Patient</h1>
+
+    <div class="flex flex-row gap-x-5">
+      <div class="flex flex-col mt-5">
+        <label for="firstName">First Name</label>
+        <input class="border rounded-md p-2.5" type="text" id="firstName" name="firstName" formControlName="firstName" required>
+      </div>
+
+      <div class="flex flex-col mt-5">
+        <label for="lastName">Last Name</label>
+        <input class="border rounded-md p-2.5" type="text" id="lastName" name="lastName" formControlName="lastName" required>
+      </div>
+    </div>
+
+    <div class="flex flex-col mt-5">
+      <label for="address">Address</label>
+      <input class="border rounded-md p-2.5" type="text" id="address" name="address" formControlName="address">
+    </div>
+
+    <div class="flex flex-row gap-x-5">
+      <div class="flex flex-col mt-5">
+        <label for="phoneNumber">Phone Number</label>
+        <input class="border rounded-md p-2.5" type="tel" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber">
+      </div>
+
+      <div class="flex flex-col mt-5">
+        <label for="birthDate">Date of Birth</label>
+        <input class="border rounded-md p-2.5" type="date" id="birthDate" name="birthDate" formControlName="birthDate" required>
+      </div>
+    </div>
+  </form>
+</section>

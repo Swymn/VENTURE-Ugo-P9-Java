@@ -7,8 +7,9 @@ import { PatientService } from '../../services/patient.service';
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.css'
 })
-export class PatientListComponent implements OnInit{
+export class PatientListComponent implements OnInit {
   patients: Patient[] = [];
+  selectedPatient: Patient | undefined;
   error: string | undefined = undefined;
 
   constructor(private service: PatientService) { }
@@ -18,5 +19,9 @@ export class PatientListComponent implements OnInit{
       next: (patients) => this.patients = patients,
       error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
     });
+  }
+
+  onEdit(patient: Patient) {
+    this.selectedPatient = patient;
   }
 }

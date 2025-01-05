@@ -1,6 +1,10 @@
 <section class="flex flex-col justify-center items-center space-y-4 my-10">
   <h1 class="font-bold text-3xl">Patients List</h1>
 
+  @if (selectedPatient !== undefined) {
+    <app-patient-update-form [patient]="selectedPatient" />
+  }
+
   @if (error !== undefined) {
     <div>
       <p>{{ error }}</p>
@@ -22,7 +26,7 @@
             <td class="px-4 py-2">{{ patient.lastName }}</td>
             <td class="px-4 py-2">{{ patient.birthDate | date: 'longDate' }}</td>
             <td class="px-4 py-2">
-              <a routerLink="/patients/update/{{ patient.identifier }}" class="text-blue-500">View</a>
+              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="onEdit(patient)">Edit</button>
             </td>
           </tr>
         }
