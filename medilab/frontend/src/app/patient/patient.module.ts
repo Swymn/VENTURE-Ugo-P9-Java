@@ -5,7 +5,7 @@ import { PatientRoutingModule } from './patient-routing.module';
 import { ConfigService } from '../core/services/config.service';
 import { Subscription } from 'rxjs';
 import { PatientUpdateFormComponent } from './components/patient-update-form/patient-update-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 
 export function initializePatientModule(configService: ConfigService): () => Subscription {
@@ -19,7 +19,6 @@ export function initializePatientModule(configService: ConfigService): () => Sub
   ],
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     CoreModule,
     PatientRoutingModule

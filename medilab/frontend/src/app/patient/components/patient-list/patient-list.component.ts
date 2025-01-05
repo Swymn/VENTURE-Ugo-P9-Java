@@ -17,10 +17,7 @@ export class PatientListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.patientService.findAllPatients().subscribe({
-      next: (patients) => this.patients = patients,
-      error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
-    });
+    this.loadPatients();
   }
 
   onEdit(patient: Patient) {
@@ -32,12 +29,27 @@ export class PatientListComponent implements OnInit {
   }
 
   onSubmit(patient: Patient) {
+    this.updatePatient(patient);
+  }
+
+  private loadPatients(): void {
+    this.patientService.findAllPatients().subscribe({
+      next: (patients) => this.patients = patients,
+      error: () => this.handleError('Something went wrong, please try again later.')
+    });
+  }
+
+  private updatePatient(patient: Patient): void {
     this.patientService.updatePatient(patient).subscribe({
       next: (updatedPatient) => {
         this.selectedPatient = undefined;
         this.patients = this.patients.map(p => p.identifier === updatedPatient.identifier ? updatedPatient : p);
       },
-      error: () => this.error = `Une erreur est survenu, veuillez réessayer plus tard.`
+      error: () => this.handleError('Something went wrong, please try again later.')
     });
+  }
+
+  private handleError(message: string): void {
+    this.error = message;
   }
 }

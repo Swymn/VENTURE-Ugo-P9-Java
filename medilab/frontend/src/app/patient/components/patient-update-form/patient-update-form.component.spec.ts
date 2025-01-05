@@ -49,17 +49,6 @@ describe('PatientUpdateFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  test('should format date', () => {
-    // GIVEN a date string
-    const date = '2021-01-01T00:00:00';
-
-    // WHEN the date is formatted
-    const formattedDate = component.toInputDateFormat(date);
-
-    // THEN the date should be formatted correctly
-    expect(formattedDate).toBe('2021-01-01');
-  });
-
   test('should initialize form', async () => {
     // GIVEN a patient update form component with a patient
     // WHEN the component is initialized
@@ -82,6 +71,9 @@ describe('PatientUpdateFormComponent', () => {
 
     const addressInput = fixture.debugElement.query(By.css('input[formControlName="address"]')).nativeElement;
     expect(addressInput.value).toBe('123 Main St');
+
+    const birthDateInput = fixture.debugElement.query(By.css('input[formControlName="birthDate"]')).nativeElement;
+    expect(birthDateInput.value).toBe('1980-01-01');
   });
 
   test('Should submit the form', () => {

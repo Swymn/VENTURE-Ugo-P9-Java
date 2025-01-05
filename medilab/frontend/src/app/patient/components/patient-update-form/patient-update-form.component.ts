@@ -9,20 +9,20 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 })
 export class PatientUpdateFormComponent implements OnChanges {
   @Input() patient?: Patient;
-  @Output() updatePatient;
-  @Output() cancelUpdate;
+  @Output() updatePatient: EventEmitter<Patient>;
+  @Output() cancelUpdate: EventEmitter<void>;
 
   patientForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
-    this.patientForm = this.initializePatientForm();
-    this.updatePatient = new EventEmitter<Patient>();
-    this.cancelUpdate = new EventEmitter<void>();
+    this.patientForm = this.createPatientForm();
+    this.updatePatient = new EventEmitter();
+    this.cancelUpdate = new EventEmitter();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patient'] && changes['patient'].currentValue) {
-      this.patientForm = this.initializePatientForm(changes['patient'].currentValue);
+      this.patientForm = this.createPatientForm(changes['patient'].currentValue);
     }
   }
 
@@ -36,7 +36,7 @@ export class PatientUpdateFormComponent implements OnChanges {
     this.cancelUpdate.emit();
   }
 
-  initializePatientForm(patient?: Patient): FormGroup {
+  private createPatientForm(patient?: Patient): FormGroup {
     return this.formBuilder.group({
       firstName: new FormControl(patient?.firstName, [Validators.required]),
       lastName: new FormControl(patient?.lastName, [Validators.required]),
@@ -47,11 +47,11 @@ export class PatientUpdateFormComponent implements OnChanges {
     });
   }
 
-  toInputDateFormat(date: string): string {
+  private toInputDateFormat(date: string): string {
     return date.split('T')[0];
   }
 
-  toPatient(): Patient {
+  private toPatient(): Patient {
     return {
       identifier: this.patient!.identifier,
       createdAt: this.patient!.createdAt,
